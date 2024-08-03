@@ -7,28 +7,60 @@ import CourseDetail from './components/CourseDetail';
 import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
 import BookingForm from './components/BookingForm';
+import UserDashboard from './components/UserDashboard';
+import Footer from './components/Footer';
+import HomePage from './components/HomePage';
+import NewsPage from './components/NewsPage';
+import BookingPage from './components/BookingPage';
 import './App.css';
-
-
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courses, setCourses] = useState([]);
-  
-
-
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/courses')
-      .then(response => response.json())
-      .then(data => setCourses(data));
+    fetchCourses();
+    checkLoginStatus();
   }, []);
 
-  const handleLogin = (username) => {
+  const fetchCourses = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/courses');
+      const data = await response.json();
+      setCourses(data);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
+
+  const checkLoginStatus = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+      setIsAdmin(localStorage.getItem('isAdmin') === 'true');
+      setUser(JSON.parse(localStorage.getItem('user')));
+    }
+  };
+
+  const handleLogin = (userData) => {
     setIsLoggedIn(true);
-    setIsAdmin(username === 'admin'); // Just an example, replace with actual logic
+    setIsAdmin(userData.isAdmin);
+    setUser(userData);
+    localStorage.setItem('token', userData.token);
+    localStorage.setItem('isAdmin', userData.isAdmin);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('user');
   };
 
   const handleBooking = (course) => {
@@ -38,27 +70,36 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
+        <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/" component={HomePage} />
+          <Route path="/news" component={NewsPage} />
+          <Route exact path="/courses">
             <CourseList courses={courses} onBookCourse={handleBooking} />
           </Route>
           <Route path="/course/:id">
             <CourseDetail courses={courses} />
           </Route>
+          <Route path="/booking" component={BookingPage} />
           <Route path="/login">
-            {isLoggedIn ? <Redirect to="/" /> : <Login onLogin={handleLogin} />}
+            {isLoggedIn ? <Redirect to="/dashboard" /> : <Login onLogin={handleLogin} />}
           </Route>
-          <Route path="/admin">
-            {isAdmin ? <AdminDashboard /> : <Redirect to="/" />}
+          <Route path="/dashboard">
+            {isLoggedIn ? (
+              isAdmin ? <AdminDashboard /> : <UserDashboard user={user} />
+            ) : (
+              <Redirect to="/login" />
+            )}
           </Route>
         </Switch>
         {selectedCourse && (
           <BookingForm
             course={selectedCourse}
             onClose={() => setSelectedCourse(null)}
+            user={user}
           />
         )}
+        <Footer />
       </div>
     </Router>
   );

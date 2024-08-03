@@ -1,0 +1,69 @@
+/* 您可以將這段代碼放在一個共享的 CSS 文件中，例如 src/components/SharedStyles.module.css */
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333333; /* 淺黑色背景 */
+    color: #ffffff; /* 白色文字 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #ffffff; /* 確保 logo 也是白色 */
+  }
+  
+  .brand-name {
+    font-size: 18px;
+    color: #ffffff;
+  }
+  
+  .nav-right a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-right a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 輕微的懸停效果 */
+  }
+  
+  /* 如果您有下拉菜單，可能需要調整其樣式 */
+  .nav-right .dropdown {
+    position: relative;
+  }
+  
+  .nav-right .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444444; /* 稍微深一點的背景色 */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .nav-right .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .nav-right .dropdown-content a {
+    color: #ffffff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .nav-right .dropdown-content a:hover {
+    background-color: #555555;
+  }
