@@ -11,7 +11,7 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // 可以添加更多字段，如价格、时长等
+  // 可以添加更多，如價格，時間等
 });
 
 module.exports = mongoose.model('Course', CourseSchema);

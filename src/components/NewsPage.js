@@ -8,23 +8,9 @@ import './SharedStyles.module.css';
 const NewsPage = () => {
   return (
     <div className="news-page">
-      <nav className="top-nav">
-        <div className="nav-left">
-          <span className="logo">👤</span>
-          <span className="brand-name">柯琳先生語言工作室</span>
-        </div>
-        <div className="nav-right">
-          <Link to="/">首頁</Link>
-          <Link to="/news">最新消息</Link>
-          <Link to="/courses">課程資訊 ▼</Link>
-          <Link to="/booking">預約課程</Link>
-        </div>
-      </nav>
-      
       <div className="hero-image">
         <h1 className="hero-title">最新消息</h1>
       </div>
-      
       <div className="news-content">
         <div className="news-item">
           <h2>2024 年 7 月 24 日</h2>

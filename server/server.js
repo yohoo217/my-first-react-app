@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
-const coursesRouter = require('./routes/courses');
-const bookingsRouter = require('./routes/bookings');
-const authRouter = require('./routes/auth');
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const coursesRouter = require('./routes/courses');
+const bookingsRouter = require('./routes/bookings');
+const authRouter = require('./routes/auth');
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
@@ -35,4 +35,4 @@ app.use('/api/courses', coursesRouter);
 app.use('/api/bookings', verifyToken, bookingsRouter);
 
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`服务器运行在端口 ${PORT}`));
+app.listen(PORT, () => console.log(`伺服器運行在 ${PORT}`));

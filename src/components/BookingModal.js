@@ -1,5 +1,6 @@
 /*BookingModal.js*/
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function BookingModal({ course, onClose }) {
   const [name, setName] = useState('');
@@ -84,5 +85,12 @@ function BookingModal({ course, onClose }) {
     </div>
   );
 }
+
+BookingModal.propTypes = {
+  course: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default BookingModal;

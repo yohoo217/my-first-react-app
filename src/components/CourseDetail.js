@@ -14,26 +14,6 @@ const CourseDetail = ({ courses }) => {
   
     return (
       <div className="course-detail-page">
-    <nav className="top-nav">
-      <div className="nav-left">
-        <span className="logo">👤</span>
-        <span className="brand-name">柯琳先生語言工作室</span>
-      </div>
-      <div className="nav-right">
-        <Link to="/">首頁</Link>
-        <Link to="/news">最新消息</Link>
-        <div className="dropdown">
-          <Link to="/courses">課程資訊 ▼</Link>
-          <div className="dropdown-content">
-            <Link to="/courses/beginner">初級課程</Link>
-            <Link to="/courses/intermediate">中級課程</Link>
-            <Link to="/courses/advanced">高級課程</Link>
-          </div>
-        </div>
-        <Link to="/booking">預約課程</Link>
-      </div>
-    </nav>
-  
         <div className="course-detail">
           <img src={course.image} alt={course.name} className="course-image" />
           <h1>{course.name}</h1>
