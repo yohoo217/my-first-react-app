@@ -20,6 +20,7 @@ function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -29,10 +30,14 @@ function App() {
   const fetchCourses = async () => {
     try {
       const response = await fetch('http://localhost:5001/api/courses');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       setCourses(data);
     } catch (error) {
       console.error('Error fetching courses:', error);
+      setError('Failed to fetch courses. Please try again later.');
     }
   };
 
@@ -71,6 +76,7 @@ function App() {
     <Router>
       <div className="App">
         <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
+        {error && <div className="error-message">{error}</div>}
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/news" component={NewsPage} />

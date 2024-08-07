@@ -39,7 +39,10 @@ const BookingPage = () => {
           {courses.map(course => (
             <div key={course._id} className="course-item">
               <h3>{course.name}</h3>
-              <p>{course.description}</p>
+                <p>{course.duration && <li>課程時長：{course.duration}</li>}</p>
+                <p>{course.level && <li>難度級別：{course.level}</li>}</p>
+                <p>{course.startDate && <li>開課日期：{course.startDate}</li>}</p>
+                <p>{course.price && <li>課程費用：{course.price}</li>}</p>
               <button onClick={() => setSelectedCourse(course)}>選擇此課程</button>
             </div>
           ))}

@@ -14,7 +14,7 @@ const CourseList = ({ courses }) => {
       </div>
       <div className="course-grid">
         {courses.map(course => (
-          <div key={course.id} className="course-card">
+          <div key={course._id} className="course-card">
             <img src={course.image} alt={course.name} className="course-image" />
             <div className="course-info">
               <h2>{course.name}</h2>
@@ -24,7 +24,7 @@ const CourseList = ({ courses }) => {
                 <li>難度級別：{course.level}</li>
                 <li>開課日期：{course.startDate}</li>
               </ul>
-              <Link to={`/course/${course.id}`} className="learn-more-btn">了解更多</Link>
+              <Link to={`/course/${course._id}`} className="learn-more-btn">了解更多</Link>
             </div>
           </div>
         ))}

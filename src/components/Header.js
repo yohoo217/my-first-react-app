@@ -30,10 +30,10 @@ function Header({ isLoggedIn }) {
           </button>
           {isDropdownOpen && (
             <div className="dropdown-content">
-              <Link to="/course/tour_japanese">旅遊日文班</Link>
-              <Link to="/coursesDetail/japanese_conversation">日文主題會話班</Link>
-              <Link to="/coursesDetail/japanese_private_lesson">日語家教</Link>
-              <Link to="/coursesDetail/english_private_lesson">英語家教</Link>
+              <Link to="/course/66ae5d1359e9598a463be248">旅遊日文班</Link>
+              <Link to="/course/66ad08a4841e69a74ed3e4f2">日文主題會話班</Link>
+              <Link to="/course/66ad0e5f405be3b46210760e">日語家教</Link>
+              <Link to="/course/66ae5f68efe57d99fac184ae">英語家教</Link>
             </div>
           )}
         </div>
