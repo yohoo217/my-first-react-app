@@ -1,6 +1,5 @@
 // src/components/NewsPage.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './NewsPage.css';
 import './SharedStyles.module.css';
 

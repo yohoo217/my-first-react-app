@@ -1,6 +1,5 @@
 // src/components/HomePage.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './HomePage.css'; // 確保創建並導入對應的 CSS 文件
 import './SharedStyles.module.css';
 

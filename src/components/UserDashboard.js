@@ -1,37 +1,39 @@
-// src/components/UserDashboard.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 const UserDashboard = ({ user }) => {
   const [bookings, setBookings] = useState([]);
 
+  const fetchUserBookings = useCallback(async () => {
+    if (user && user._id) {
+      try {
+        const response = await fetch(`http://localhost:5001/api/bookings/user/${user._id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+        const data = await response.json();
+        setBookings(data);
+      } catch (error) {
+        console.error('Error fetching user bookings:', error);
+      }
+    }
+  }, [user]);
+
   useEffect(() => {
     fetchUserBookings();
-  }, []);
+  }, [fetchUserBookings]);
 
-  const fetchUserBookings = async () => {
-    try {
-      const response = await fetch(`http://localhost:5001/api/bookings/user/${user.id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      setBookings(data);
-    } catch (error) {
-      console.error('Error fetching user bookings:', error);
-    }
-  };
+  if (!user) return <div>Loading...</div>;
 
   return (
     <div className="user-dashboard">
-      <h2>Welcome, {user.name}</h2>
-      <h3>Your Bookings</h3>
+      <h1>Welcome, {user.name}!</h1>
+      <h2>Your Bookings:</h2>
       {bookings.length > 0 ? (
         <ul>
-          {bookings.map(booking => (
+          {bookings.map((booking) => (
             <li key={booking._id}>
-              {booking.courseName} - {new Date(booking.date).toLocaleDateString()} {booking.time}
+              {booking.courseName} - {new Date(booking.date).toLocaleDateString()}
             </li>
           ))}
         </ul>
@@ -44,7 +46,7 @@ const UserDashboard = ({ user }) => {
 
 UserDashboard.propTypes = {
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
 };
