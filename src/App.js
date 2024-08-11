@@ -79,8 +79,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
-        {error && <div className="error-message">{error}</div>}
+      <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />        {error && <div className="error-message">{error}</div>}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/news" element={<NewsPage />} />

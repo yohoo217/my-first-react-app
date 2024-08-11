@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './Header.css';
 
-function Header({ isLoggedIn }) {
+function Header({ isLoggedIn, onLogout }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
+  };
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/');
   };
 
   return (
@@ -39,8 +45,8 @@ function Header({ isLoggedIn }) {
         </div>
         <Link to="/booking">預約課程</Link>
         {isLoggedIn ? (
-          <Link to="/logout">登出</Link>
-        ) : (
+        <button onClick={handleLogout} className="logout-button">登出</button>
+      ) : (
           <Link to="/login">登入</Link>
         )}
       </nav>
@@ -50,6 +56,7 @@ function Header({ isLoggedIn }) {
 
 Header.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default Header;
