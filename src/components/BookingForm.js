@@ -13,12 +13,21 @@ function BookingForm({ course, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('token');
+      console.log('Token:', token);
+  
+      if (!token) {
+        throw new Error('No authentication token found. Please log in.');
+      }
+  
       const response = await fetch('http://localhost:5001/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`  // 確保這裡使用 'Bearer ' 前綴
         },
         body: JSON.stringify({
+          courseId: course._id,
           courseName: course.name,
           name,
           email,
@@ -26,18 +35,22 @@ function BookingForm({ course, onClose }) {
           time
         }),
       });
-
+  
+      console.log('Response status:', response.status);
+  
       if (!response.ok) {
-        throw new Error('預約失敗');
+        const errorData = await response.json();
+        console.log('Error data:', errorData);
+        throw new Error(errorData.message || 'Failed to book');
       }
-
+  
       const data = await response.json();
-      console.log('預約成功:', data);
-      alert('預約成功！');
+      console.log('Booking successful:', data);
+      alert('Booking successful!');
       onClose();
     } catch (error) {
-      console.error('預約錯誤:', error);
-      alert('預約失敗，請稍後再試。');
+      console.error('Booking error:', error);
+      alert(error.message || 'Booking failed, please try again.');
     }
   };
 
@@ -96,7 +109,7 @@ function BookingForm({ course, onClose }) {
 
 BookingForm.propTypes = {
   course: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   onClose: PropTypes.func.isRequired,

@@ -48,10 +48,10 @@ const BookingPage = () => {
           ))}
         </div>
       ) : (
-        <BookingForm
-          course={selectedCourse}
-          onClose={() => setSelectedCourse(null)}
-        />
+      <BookingForm
+        course={{...selectedCourse, id: selectedCourse._id}}
+        onClose={() => setSelectedCourse(null)}
+      />
       )}
     </div>
   );

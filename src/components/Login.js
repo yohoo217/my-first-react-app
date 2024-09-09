@@ -1,9 +1,10 @@
 // 文件位置：src/components/Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from '../services/authService';
+import PropTypes from 'prop-types';
 
-const Login = () => {
+
+const Login = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState('login');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,15 +12,37 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isMounted, setIsMounted] = useState(true);
+
+  useEffect(() => {
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
     try {
-      await login(email, password);
+      const response = await fetch('http://localhost:5001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+  
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      onLogin(data);  // 假設這個函數來自props，用於更新App.js中的狀態
       navigate('/dashboard');
-    } catch (err) {
-      setError(err.message || '登入失敗');
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message);
     }
   };
 
@@ -31,11 +54,23 @@ const Login = () => {
       return;
     }
     try {
-      await register(name, email, password);
+      const response = await fetch('http://localhost:5001/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || '註冊失敗');
+      }
       setActiveTab('login');
       setError('註冊成功，請登入');
     } catch (err) {
-      setError(err.message || '註冊失敗');
+      if (isMounted) {
+        setError(err.message || '註冊失敗');
+      }
     }
   };
 
@@ -142,6 +177,10 @@ const Login = () => {
       </div>
     </div>
   );
+};
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired
 };
 
 export default Login;

@@ -14,6 +14,8 @@ import NewsPage from './components/NewsPage';
 import BookingPage from './components/BookingPage';
 import './App.css';
 
+
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -42,6 +44,10 @@ function App() {
     checkLoginStatus();
   }, []);
 
+  useEffect(() => {
+    console.log('Login status changed:', isLoggedIn);
+  }, [isLoggedIn]);
+  
   const checkLoginStatus = () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -55,12 +61,13 @@ function App() {
   };
 
   const handleLogin = (userData) => {
+    console.log('Logging in with user data:', userData);
     setIsLoggedIn(true);
-    setIsAdmin(userData.isAdmin);
-    setUser(userData);
+    setIsAdmin(!!userData.user?.isAdmin);
+    setUser(userData.user);
     localStorage.setItem('token', userData.token);
-    localStorage.setItem('isAdmin', userData.isAdmin.toString());
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('isAdmin', (!!userData.user?.isAdmin).toString());
+    localStorage.setItem('user', JSON.stringify(userData.user));
   };
 
   const handleLogout = () => {

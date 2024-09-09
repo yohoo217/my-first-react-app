@@ -27,8 +27,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    console.log('Generated token for user:', user._id); // 調試輸出
+
     res.send({ user, token });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(400).send(error);
   }
 });

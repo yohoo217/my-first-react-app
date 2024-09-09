@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 移動這些到這裡
 const coursesRouter = require('./routes/courses');
 const bookingsRouter = require('./routes/bookings');
 const authRouter = require('./routes/auth');

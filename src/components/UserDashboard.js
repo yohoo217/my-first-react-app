@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 
 const UserDashboard = ({ user }) => {
   const [bookings, setBookings] = useState([]);
+  const [error, setError] = useState(null);
 
   const fetchUserBookings = useCallback(async () => {
     if (user && user._id) {
       try {
-        const response = await fetch(`http://localhost:5001/api/bookings/user/${user._id}`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5001/api/bookings/user/${user._id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch bookings');
         }
@@ -15,6 +21,7 @@ const UserDashboard = ({ user }) => {
         setBookings(data);
       } catch (error) {
         console.error('Error fetching user bookings:', error);
+        setError(error.message);
       }
     }
   }, [user]);
@@ -23,6 +30,7 @@ const UserDashboard = ({ user }) => {
     fetchUserBookings();
   }, [fetchUserBookings]);
 
+  if (error) return <div>Error: {error}</div>;
   if (!user) return <div>Loading...</div>;
 
   return (
@@ -46,9 +54,9 @@ const UserDashboard = ({ user }) => {
 
 UserDashboard.propTypes = {
   user: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
+    _id: PropTypes.string,
+    name: PropTypes.string,
+  })
 };
 
 export default UserDashboard;
